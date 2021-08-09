@@ -18,6 +18,10 @@ import java.util.List;
 public class ControllerState {
 
     private StateService stateService;
+
+    public ControllerState(StateService stateService){
+        this.stateService = stateService;
+    }
     @GetMapping
     public List<State> listAll(){
         return this.stateService.listAll();
