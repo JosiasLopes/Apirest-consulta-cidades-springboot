@@ -7,10 +7,12 @@ import com.github.josiaslopes.citiesapi.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CountryService {
@@ -34,6 +36,17 @@ public class CountryService {
     public Country getById(Long id) throws CountryNotFoundException {
         Country pais = countryIsExists(id);
         return pais;
+    }
+
+    public ResponseEntity getOne(Long id){
+        Optional<Country> opt = this.countryRepo.findById(id);
+        if(opt.isPresent()){
+            return ResponseEntity.ok().body(opt.get());
+        }else{
+            //return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body("Registro do pais "+id+" não encontrado");
+        }
+
     }
 
     public Country countryIsExists(Long id) throws CountryNotFoundException {
