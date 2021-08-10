@@ -7,4 +7,9 @@ public class CityNotFoundException extends Exception{
     public CityNotFoundException(Long id) {
         this.message = "Cidade "+id+" não encontrada";
     }
+
+    @Override
+    public String getMessage() {
+        return message = "Cidade não encontrada";
+    }
 }

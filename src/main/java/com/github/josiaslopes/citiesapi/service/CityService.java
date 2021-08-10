@@ -7,15 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CityService {
 
     private final CityRepository CityRepo;
 
-    @Autowired  //faz a injeção od PersonRepository é como se ele fizesse um construtor
+   // @Autowired  //faz a injeção od PersonRepository é como se ele fizesse um construtor
     public CityService(CityRepository CityRepo){
         this.CityRepo = CityRepo;
     }
@@ -29,9 +31,17 @@ public class CityService {
         return CityRepo.findAll(page);
 
     }
-    public City getById(Long id) throws CityNotFoundException {
-        City pais = CityIsExists(id);
-        return pais;
+    //contrariando a noção de restfull ele retornou u status de ok( mas é possivel retornar um 404 ou etc)
+    public ResponseEntity getById(Long id) throws CityNotFoundException {
+
+        Optional<City> opt = this.CityRepo.findById(id);
+        if(opt.isPresent()){
+            return ResponseEntity.ok().body(opt.get());
+        }else{
+            // new CityNotFoundException(id);
+            //return ResponseEntity.notFound().build();
+           return ResponseEntity.ok().body( "Registro da cidade"+id+" não encontrada");
+        }
     }
 
     public ResponseEntity getOne(Long id){
@@ -40,13 +50,13 @@ public class CityService {
             return ResponseEntity.ok().body(opt.get());
         }else{
             //return ResponseEntity.notFound().build();
-            return ResponseEntity.ok().body("Registro do pais "+id+" não encontrado");
+            return ResponseEntity.ok().body("Registro da cidade"+id+" não encontrada");
         }
 
     }
 
     public City CityIsExists(Long id) throws CityNotFoundException {
-        City pais= this.CityRepo.findById(id).orElseThrow(()->new CityNotFoundException(id));
-        return pais;
+        City cidade= this.CityRepo.findById(id).orElseThrow(()->new CityNotFoundException(id));
+        return cidade;
     }
 }
