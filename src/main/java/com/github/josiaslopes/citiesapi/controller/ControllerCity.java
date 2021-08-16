@@ -2,6 +2,7 @@ package com.github.josiaslopes.citiesapi.controller;
 
 import com.github.josiaslopes.citiesapi.entity.City;
 import com.github.josiaslopes.citiesapi.exception.CityNotFoundException;
+import com.github.josiaslopes.citiesapi.hateoas.CityResponse;
 import com.github.josiaslopes.citiesapi.service.CityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +48,10 @@ public class ControllerCity {
     @GetMapping("/test/{id}")
     public ResponseEntity<City> getById2(@PathVariable Long id)  {
             return this.cityService.getCityById(id);
+    }
+    @GetMapping("/response/{id}")
+    public ResponseEntity<CityResponse> getHATEOASById(@PathVariable Long id)  {
+        return this.cityService.getHATEOASById(id);
     }
 
     @GetMapping("/{id}")
