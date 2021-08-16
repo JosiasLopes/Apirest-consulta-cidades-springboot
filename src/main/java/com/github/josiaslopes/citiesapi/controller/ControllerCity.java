@@ -32,17 +32,25 @@ public class ControllerCity {
 
 
     @GetMapping("/city/{id}")
-    public ResponseEntity getById(@PathVariable Long id)  {
+    public ResponseEntity<City> getById(@PathVariable Long id)  {
+
         try{
             return this.cityService.getById(id);
         } catch (CityNotFoundException e) {
-            return ResponseEntity.ok().body( e.getMessage());
+           // return ResponseEntity.ok().body( e.getMessage());
+            return ResponseEntity.notFound().build();
         }
 
     }
 
+    //testando o exceptionhandler
+    @GetMapping("/test/{id}")
+    public ResponseEntity<City> getById2(@PathVariable Long id)  {
+            return this.cityService.getCityById(id);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity getOne(@PathVariable Long id) {
+    public ResponseEntity<City> getOne(@PathVariable Long id) {
         return this.cityService.getOne(id);
     }
 

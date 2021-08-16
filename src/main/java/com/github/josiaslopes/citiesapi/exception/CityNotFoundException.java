@@ -1,6 +1,10 @@
 package com.github.josiaslopes.citiesapi.exception;
 
-public class CityNotFoundException extends Exception{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Cidade não encontrada!!")
+public class CityNotFoundException extends RuntimeException{
 
     String message;
 

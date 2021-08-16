@@ -32,25 +32,39 @@ public class CityService {
 
     }
     //contrariando a noção de restfull ele retornou u status de ok( mas é possivel retornar um 404 ou etc)
-    public ResponseEntity getById(Long id) throws CityNotFoundException {
+    public ResponseEntity<City> getById(Long id) throws CityNotFoundException {
 
         Optional<City> opt = this.CityRepo.findById(id);
         if(opt.isPresent()){
             return ResponseEntity.ok().body(opt.get());
         }else{
-            // new CityNotFoundException(id);
-            //return ResponseEntity.notFound().build();
-           return ResponseEntity.ok().body( "Registro da cidade"+id+" não encontrada");
+             throw new CityNotFoundException(id);
+            //return ResponseEntity.notFound().build(); //pode fazer isso
+          // return ResponseEntity.ok().body( "Registro da cidade"+id+" não encontrada"); //ou isso
         }
     }
 
-    public ResponseEntity getOne(Long id){
+    //mesmo método acima porem retorna uma entidade ao inves de um responseEntity
+    //dessa forma podemos criar um ExceptionHandler e passar o status da response aproprado
+    public ResponseEntity<City> getCityById(Long id) {
         Optional<City> opt = this.CityRepo.findById(id);
         if(opt.isPresent()){
             return ResponseEntity.ok().body(opt.get());
         }else{
-            //return ResponseEntity.notFound().build();
-            return ResponseEntity.ok().body("Registro da cidade"+id+" não encontrada");
+            throw new CityNotFoundException(id);
+            //return ResponseEntity.notFound().build(); //pode fazer isso
+            // return ResponseEntity.ok().body( "Registro da cidade"+id+" não encontrada"); //ou isso
+        }
+    }
+
+    //aqui foi setado o status manualmente sem usar handler
+    public ResponseEntity<City> getOne(Long id){
+        Optional<City> opt = this.CityRepo.findById(id);
+        if(opt.isPresent()){
+            return ResponseEntity.ok().body(opt.get());
+        }else{
+            return ResponseEntity.notFound().build();
+           // return ResponseEntity.ok().body("Registro da cidade"+id+" não encontrada");
         }
 
     }

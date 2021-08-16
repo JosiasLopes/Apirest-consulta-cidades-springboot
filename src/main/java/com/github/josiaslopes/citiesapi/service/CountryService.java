@@ -43,8 +43,8 @@ public class CountryService {
         if(opt.isPresent()){
             return ResponseEntity.ok().body(opt.get());
         }else{
-            //return ResponseEntity.notFound().build();
-            return ResponseEntity.ok().body("Registro do pais "+id+" não encontrado");
+            return ResponseEntity.notFound().build();
+          //  return ResponseEntity.ok().body("Registro do pais "+id+" não encontrado");
         }
 
     }
