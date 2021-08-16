@@ -2,10 +2,12 @@ package com.github.josiaslopes.citiesapi.service;
 
 import com.github.josiaslopes.citiesapi.entity.City;
 import com.github.josiaslopes.citiesapi.exception.CityNotFoundException;
+import com.github.josiaslopes.citiesapi.hateoas.CityResponse;
 import com.github.josiaslopes.citiesapi.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +40,25 @@ public class CityService {
         if(opt.isPresent()){
             return ResponseEntity.ok().body(opt.get());
         }else{
-             throw new CityNotFoundException(id);
+            throw new CityNotFoundException(id);
             //return ResponseEntity.notFound().build(); //pode fazer isso
-          // return ResponseEntity.ok().body( "Registro da cidade"+id+" não encontrada"); //ou isso
+            // return ResponseEntity.ok().body( "Registro da cidade"+id+" não encontrada"); //ou isso
+        }
+    }
+    
+    public ResponseEntity<CityResponse> getHATEOASById(Long id){
+        Optional<City> opt = this.CityRepo.findById(id);
+        if(opt.isPresent()){
+            City city = opt.get();
+            CityResponse cityResponse = new CityResponse();
+            cityResponse.setName(city.getName());
+            cityResponse.setUf(city.getUf());
+            cityResponse.add(Link.of("https://localhost:8080/api/v1/cities/"+id));
+            return ResponseEntity.ok().body(cityResponse);
+        }else{
+            throw new CityNotFoundException(id);
+            //return ResponseEntity.notFound().build(); //pode fazer isso
+            // return ResponseEntity.ok().body( "Registro da cidade"+id+" não encontrada"); //ou isso
         }
     }
 
